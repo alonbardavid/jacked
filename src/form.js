@@ -6,35 +6,33 @@ class Form {
     value;
     fields;
     errors;
-    schema;
     validator;
-    merger;
     onChange;
 
     constructor(value, arg2) {
         this.value =value;
         if (arg2 instanceof Form){
-            const previousForm = arg2;
-            this.validator = previousForm.validator;
-            this.merger = previousForm.merger;
-            this.fieldBuilder = previousForm.fieldBuilder;
-            this.fields = previousForm.fields;
-            this.onChange = previousForm.onChange;
-            this.errors = previousForm.errors;
+            this.initFromPreviousForm(arg2);
         } else {
-            const {schema,validator,merger,fieldBuilder,onChange} = arg2;
-            this.validator = validator(schema);
-            this.merger = merger;
-            this.fieldBuilder = fieldBuilder;
-            this.onChange = onChange;
-            this.errors = [];
-            this.buildFields();
-            this.validateAll();
+            this.initFromOptions(arg2);
         }
     }
-    onInput(path,value){
-        const newValue = this.merger(this.value,path,value);
-        const form = new Form(newValue,this);
+    initFromPreviousForm(previousForm){
+        this.validator = previousForm.validator;
+        this.fields = previousForm.fields;
+        this.onChange = previousForm.onChange;
+        this.errors = previousForm.errors;
+    }
+    initFromOptions(options){
+        this.validator = options.validator(options.schema);
+        this.onChange = options.onChange;
+        this.errors = [];
+        this.buildFields();
+        this.validateAll();
+    }
+    onInput(path,fieldValue){
+        const newRootValue = set(path,fieldValue,this.value);
+        const form = new Form(newRootValue,this);
         form.validateAfterFieldChange(path);
         this.onChange(form,{
             path,
@@ -53,13 +51,12 @@ class Form {
     }
     buildField = ({path,value,error,dirty}) =>{
         const oldField = get(this.fields,path);
-        return this.fieldBuilder({
+        return {
             value,
             onChange:this.onInput.bind(this,path),
             error,
-            prev:oldField,
             dirty:dirty == null? oldField.dirty : dirty
-        });
+        };
     };
     updateFieldsFromErrors(errors){
         errors.forEach(change=>{
@@ -77,10 +74,8 @@ class Form {
     validateAfterFieldChange(path){
         const oldErrors = this.errors;
         this.errors = this.validator(this.value);
-
         const changes = getChanges(oldErrors,this.errors,path);
         this.updateFieldsFromErrors(changes);
-
     }
 }
 function getChanges(old,current,forcePath){
@@ -113,9 +108,9 @@ export function configureBuilder(options){
     return function buildValidator(schema){
         return function validate(value,onChange){
             return new Form(value,{
+                ...options,
                 schema,
                 onChange,
-                ...options
             })
         }
     }
