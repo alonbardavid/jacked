@@ -2,8 +2,8 @@ import {configureBuilder} from './form';
 import {validator} from './jacked-ajv';
 
 
-const buildForm = configureBuilder({
+const formBuilder = configureBuilder({
     validator:validator,
 });
 
-export {buildForm};
+export {formBuilder};

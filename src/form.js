@@ -30,22 +30,27 @@ class Form {
         this.buildFields();
         this.validateAll();
     }
-    onInput(path,fieldValue){
-        const newRootValue = set(path,fieldValue,this.value);
-        const form = new Form(newRootValue,this);
-        form.validateAfterFieldChange(path);
-        this.onChange(form,{
+    onInput(path,value){
+        this.onChange({
             path,
-            old:get(this.value,path),
-            current:get(form.value,path)
-        })
+            value
+        });
+    }
+    update(change){
+        const newRootValue = set(change.path,change.value,this.value);
+        const form = new Form(newRootValue,this);
+        form.validateAfterFieldChange(change.path);
+        return form;
     }
     buildFields(){
-        const {buildField} = this;
-        this.fields = traverse(this.value).map(function(){
+        const {buildField,value} = this;
+        this.fields = traverse(this.validator.getStructure()).map(function(){
             if(this.isLeaf) {
-                const value = this.node;
-                this.update(buildField({path:this.path.join("."),value,error:null,dirty:false}),true);
+                this.update(buildField({path:this.path.join("."),
+                    value:get(value,this.path),
+                    error:null,
+                    dirty:false})
+                ,true);
             }
         })
     }
@@ -55,13 +60,13 @@ class Form {
             value,
             onChange:this.onInput.bind(this,path),
             error,
-            dirty:dirty == null? oldField.dirty : dirty
+            dirty:dirty != null? dirty : oldField && oldField.dirty
         };
     };
     updateFieldsFromErrors(errors){
         errors.forEach(change=>{
             const value = get(this.value,change.path);
-            const field = this.buildField({path:change.path,value,error:change.error,dirty:change.dirty});
+            const field = this.buildField({path:change.path,value,error:change.message,dirty:change.dirty});
             this.fields = set(change.path,field,this.fields);
         });
         this.isValid = !(this.errors && this.errors.length > 0);
@@ -82,9 +87,10 @@ function getChanges(old,current,forcePath){
     const hash = old.reduce((hash,value)=>{
         hash.set(value.path,{
             path:value.path,
-            error:value.error,
+            message:value.message,
             old:true
         });
+        return hash;
     },new Map());
     current.forEach(value=>{
         const old = hash.get(value.path);
@@ -93,10 +99,11 @@ function getChanges(old,current,forcePath){
         } else {
             hash.set(value.path,{
                 path:value.path,
-                error:value.message
+                message:value.message
             })
         }
     });
+
     const forcedValue =hash.get(forcePath) || {path:forcePath,error:null};
     hash.set(forcePath,{
         ...forcedValue,
