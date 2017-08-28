@@ -80,4 +80,25 @@ describe("form",()=>{
         expect(form.fields.first.value).toEqual("first changed good !");
         expect(form.fields.second.value).toEqual("second changed good !");
     })
+    test("collect errors",function(){
+        const value = {
+            first:"first good",
+            second:"second good"
+        };
+        const builder = attachBuilder({first:"schema",second:"schema"});
+        let form = builder(value,change=>{
+            form = form.update(change,false);
+        });
+        form.fields.second.onChange("second bad!");
+        const oldForm = form;
+        expect(form.fields.first.value).toEqual("first good");
+        expect(form.fields.second.value).toEqual("second bad!");
+        expect(form.fields.second.error).toEqual(null);
+        expect(form.errors).toEqual([]);
+        form = form.validate();
+        expect(form.fields.second.error).toEqual("was bad value");
+        expect(form.errors).toEqual([{path:"second",message:"was bad value"}]);
+        expect(oldForm.errors).toEqual([]);
+        expect(oldForm.fields.second.error).toEqual(null);
+    });
 })

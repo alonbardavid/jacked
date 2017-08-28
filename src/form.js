@@ -36,10 +36,14 @@ class Form {
             value
         });
     }
-    update(change){
+    update(change,validate=true){
         const newRootValue = set(change.path,change.value,this.value);
         const form = new Form(newRootValue,this);
-        form.validateAfterFieldChange(change.path);
+        if (validate){
+            form.validateAfterFieldChange(change.path);
+        } else {
+            form.setFieldDirty(change.path);
+        }
         return form;
     }
     buildFields(){
@@ -72,18 +76,28 @@ class Form {
         this.isValid = !(this.errors && this.errors.length > 0);
 
     }
+    setFieldDirty(path){
+        const oldField = get(this.fields,path);
+        const field = this.buildField({path,error:oldField.error,dirty:true,value:get(this.value,path)});
+        this.fields = set(path,field,this.fields);
+    }
     validateAll(){
         this.errors = this.validator(this.value);
         this.updateFieldsFromErrors(this.errors);
     }
-    validateAfterFieldChange(path){
+    validate(){
+        const form = new Form(this.value,this);
+        form.validateAfterFieldChange();
+        return form;
+    }
+    validateAfterFieldChange(dirtyPath){
         const oldErrors = this.errors;
         this.errors = this.validator(this.value);
-        const changes = getChanges(oldErrors,this.errors,path);
+        const changes = getChanges(oldErrors,this.errors,dirtyPath);
         this.updateFieldsFromErrors(changes);
     }
 }
-function getChanges(old,current,forcePath){
+function getChanges(old,current,dirtyPath){
     const hash = old.reduce((hash,value)=>{
         hash.set(value.path,{
             path:value.path,
@@ -104,11 +118,13 @@ function getChanges(old,current,forcePath){
         }
     });
 
-    const forcedValue =hash.get(forcePath) || {path:forcePath,error:null};
-    hash.set(forcePath,{
-        ...forcedValue,
-        dirty:true
-    });
+    if (dirtyPath) {
+        const dirtyValue = hash.get(dirtyPath) || {path: dirtyPath, error: null};
+        hash.set(dirtyPath, {
+            ...dirtyValue,
+            dirty: true
+        });
+    }
     return Array.from(hash.values()).map(x=>x.old?{path:x.path,error:null}:x);
 }
 export function configureBuilder(options){
