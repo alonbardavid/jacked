@@ -32,7 +32,7 @@ describe("form",()=>{
             newForm = form.update(change);
         });
         expectGood(form);
-        form.fields.valid.onChange("new value");
+        form.fields.valid.onInput("new value");
         expectBad(newForm,"new value");
         expectGood(form);
     });
@@ -73,10 +73,10 @@ describe("form",()=>{
         });
         expect(form.fields.first.value).toEqual("first good");
         expect(form.fields.second.value).toEqual("second good");
-        form.fields.second.onChange("second changed good !");
+        form.fields.second.onInput("second changed good !");
         expect(form.fields.first.value).toEqual("first good");
         expect(form.fields.second.value).toEqual("second changed good !");
-        form.fields.first.onChange("first changed good !");
+        form.fields.first.onInput("first changed good !");
         expect(form.fields.first.value).toEqual("first changed good !");
         expect(form.fields.second.value).toEqual("second changed good !");
     })
@@ -89,7 +89,7 @@ describe("form",()=>{
         let form = builder(value,change=>{
             form = form.update(change,false);
         });
-        form.fields.second.onChange("second bad!");
+        form.fields.second.onInput("second bad!");
         const oldForm = form;
         expect(form.fields.first.value).toEqual("first good");
         expect(form.fields.second.value).toEqual("second bad!");
@@ -101,4 +101,19 @@ describe("form",()=>{
         expect(oldForm.errors).toEqual([]);
         expect(oldForm.fields.second.error).toEqual(null);
     });
+    test("changeing value while keeping error",()=>{
+        const value = {
+            valid:"bad value"
+        };
+        const builder = attachBuilder({valid:"schema"});
+        let newForm;
+        const form = builder(value,change=>{
+            newForm = form.update(change);
+        });
+        expect(form.fields.valid.value).toEqual("bad value");
+        expect(form.fields.valid.error).toEqual("was bad value");
+        form.fields.valid.onInput("new value");
+        expect(newForm.fields.valid.value).toEqual("new value");
+        expect(newForm.fields.valid.error).toEqual("was bad value");
+    })
 })
