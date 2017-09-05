@@ -5,6 +5,12 @@ const ajv = new Ajv({
 });
 
 function transformError(error){
+    if (error.keyword == "required"){
+        return {
+            path: error.params.missingProperty,
+            message: error.message
+        }
+    }
     return {
         message:error.message,
         path:error.dataPath.substr(1)
