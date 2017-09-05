@@ -8,6 +8,7 @@ class Form {
     errors;
     validator;
     onInput;
+    _submitted = false;
 
     constructor(value, arg2) {
         this.value =value;
@@ -64,6 +65,7 @@ class Form {
             value,
             onInput:this._onInput.bind(this,path),
             error,
+            submitted:this._submitted,
             dirty:dirty != null? dirty : oldField && oldField.dirty
         };
     };
@@ -75,6 +77,18 @@ class Form {
         });
         this.isValid = !(this.errors && this.errors.length > 0);
 
+    }
+    _rebuildFields(){
+        const {_buildField,value} = this;
+        this.fields = traverse(this.fields).map(function(){
+            if(this.node.onInput) {
+                this.update(_buildField({path:this.path.join("."),
+                        value:get(value,this.path),
+                        error:this.node.error,
+                        dirty:this.node.dirty})
+                    ,true);
+            }
+        })
     }
     _setFieldDirty(path){
         const oldField = get(this.fields,path);
@@ -88,6 +102,15 @@ class Form {
     validate(){
         const form = new Form(this.value,this);
         form._validateAfterFieldChange();
+        return form;
+    }
+    setSubmitted(submitted=true){
+        const form = new Form(this.value,this);
+        form._submitted = submitted;
+        if (this._submitted != submitted) {
+            form._rebuildFields();
+        }
+        form.isValid = this.isValid;
         return form;
     }
     _validateAfterFieldChange(dirtyPath){
