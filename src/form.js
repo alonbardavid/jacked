@@ -130,7 +130,7 @@ class Form {
         },new Map());
         current.forEach(value=>{
             const old = hash.get(value.path);
-            if (old && old.error == value.error) {
+            if (old && old.message == value.message) {
                 hash.delete(value.path);
             } else {
                 hash.set(value.path,{
