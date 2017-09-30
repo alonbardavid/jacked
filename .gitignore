@@ -56,3 +56,5 @@ fastlane/screenshots
 #
 haul-debug.log
 .happypack
+
+dist/

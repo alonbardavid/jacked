@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build":"babel src --out-dir dist",
+    "prepublish": "babel src --out-dir dist"
   },
   "peerDependencies": {
     "react": "16.0.0-alpha.12",
@@ -11,17 +13,19 @@
   },
   "dependencies": {
     "ajv": "^5.2.2",
-    "traverse": "^0.6.6",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "traverse": "^0.6.6"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-jest": "^20.0.3",
     "babel-preset-react-native": "^3.0.0",
     "jest": "20.0.4",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.4"
   },
-  "main":"src/index.js",
+  "main": "dist/index.js",
+  "module": "src/index.js",
   "jest": {
     "preset": "react-native"
   }
