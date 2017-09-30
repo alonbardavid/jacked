@@ -21,6 +21,9 @@ function schemaToSample(schema){
         case "object":
             return mapValues(schema.properties,val=>schemaToSample(val));
         case "array":
+            if (schema.items && schema.items.length > 0){
+                return schema.items.map(i=>schemaToSample(i));
+            }
             return [];
         default:
             return schema.type;
