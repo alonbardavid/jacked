@@ -6,7 +6,7 @@
     "test": "jest",
     "build":"babel src --out-dir dist",
     "prepare": "babel src --out-dir dist",
-    "prepack": "babel src --out-dir dist",
+    "prepack": "babel src --out-dir dist"
   },
   "peerDependencies": {
     "react": "16.0.0-alpha.12",
