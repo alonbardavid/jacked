@@ -9,6 +9,7 @@ class Form {
     validator;
     onInput;
     _submitted = false;
+    _disabled = false;
 
     constructor(value, arg2) {
         this.value =value;
@@ -52,10 +53,10 @@ class Form {
         this.fields = traverse(this.validator.getStructure()).map(function(){
             if(this.isLeaf) {
                 this.update(_buildField({path:this.path.join("."),
-                    value:get(value,this.path),
-                    error:null,
-                    dirty:false})
-                ,true);
+                        value:get(value,this.path),
+                        error:null,
+                        dirty:false})
+                    ,true);
             }
         })
     }
@@ -66,6 +67,7 @@ class Form {
             onInput:this._onInput.bind(this,path),
             error,
             submitted:this._submitted,
+            disabled:this._disabled,
             dirty:dirty != null? dirty : oldField && oldField.dirty
         };
     };
@@ -105,9 +107,15 @@ class Form {
         return form;
     }
     setSubmitted(submitted=true){
+        return this.setFormProperties({
+            submitted:submitted
+        })
+    }
+    setFormProperties(props){
         const form = new Form(this.value,this);
-        form._submitted = submitted;
-        if (this._submitted != submitted) {
+        form._submitted = props.submitted == null?form._submitted : props.submitted;
+        form._disabled = props.disabled == null?form._disabled : props.disabled;
+        if (this._submitted != props.submitted || this._disabled != props.disabled){
             form._rebuildFields();
         }
         form.isValid = this.isValid;
