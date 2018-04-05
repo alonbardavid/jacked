@@ -1,5 +1,5 @@
 import Ajv from 'ajv';
-import {mapValues} from 'lodash';
+import mapValues from 'lodash.mapvalues';
 const ajv = new Ajv({
     allErrors:true
 });
@@ -36,7 +36,7 @@ export function validator(schema){
         const valid = validate(value);
         return valid? [] : validate.errors.map(transformError);
     }
-    doValidation.getStructure = function(){
+    (doValidation as any).getStructure = function(){
         return structure;
     };
     return doValidation;

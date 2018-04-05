@@ -1,5 +1,5 @@
-import {configureBuilder} from './form';
-import {validator} from './jacked-ajv';
+import {configureBuilder} from '@jacked/core';
+import {validator} from './validator';
 
 
 const formBuilder = configureBuilder({

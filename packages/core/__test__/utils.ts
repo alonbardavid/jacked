@@ -1,5 +1,5 @@
 import traverse from 'traverse';
-import {get} from 'lodash';
+import get from 'lodash.get';
 export function mockValidator(schema){
     function validator(value) {
         return traverse(schema).reduce(function(arr,node) {

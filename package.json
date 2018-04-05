@@ -1,31 +1,20 @@
 {
-  "name": "jacked",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "test": "jest",
-    "prepare": "babel src --out-dir dist"
-  },
-  "peerDependencies": {
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.46.4"
-  },
-  "dependencies": {
-    "ajv": "^5.2.2",
-    "lodash": "^4.17.4",
-    "traverse": "^0.6.6"
+  "name":"jacked",
+  "version":"0.0.1",
+  "private":true,
+  "description": "",
+  "workspaces":[
+    "packages/*"
+  ],
+  "scripts":{
+    "bundle": "lerna run --parallel bundle",
+    "compile": "lerna run compile",
+    "clean": "lerna run --parallel clean",
+    "test": "lerna run test",
+    "build": "lerna run build"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-jest": "^20.0.3",
-    "babel-preset-react-native": "^3.0.0",
-    "jest": "20.0.4",
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.46.4"
+      "lerna": "^2.9.0"
   },
-  "main": "dist/index.js",
-  "module": "src/index.js",
-  "jest": {
-    "preset": "react-native"
-  }
+  "license":"MIT"
 }

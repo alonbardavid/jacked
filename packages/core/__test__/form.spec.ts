@@ -1,5 +1,4 @@
-import {configureBuilder} from '../src/form';
-import {set} from 'lodash/fp';
+import {configureBuilder} from '../src';
 import {mockValidator} from './utils';
 
 const attachBuilder = configureBuilder({

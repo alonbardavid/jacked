@@ -1,4 +1,4 @@
-import {validator} from '../src/jacked-ajv';
+import {validator} from '../src/validator';
 
 const schema = {
     type:"object",
