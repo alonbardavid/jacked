@@ -1,4 +1,4 @@
-import {formBuilder} from "../src/index";
+import {makeFormBuilder} from "../src/index";
 
 const schema = {
     type:"object",
@@ -21,7 +21,7 @@ describe("class-validator",()=>{
             num:12
         }
 
-        const builder = formBuilder(schema);
+        const builder = makeFormBuilder(schema);
         let newForm;
         const form = builder(value,change=>{
             newForm = form.update(change);

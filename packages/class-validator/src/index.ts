@@ -2,8 +2,8 @@ import {configureBuilder} from '@jacked/core';
 import {validator} from './validator';
 
 
-const formBuilder = configureBuilder({
+const makeFormBuilder = configureBuilder({
     validator:validator,
 });
 
-export {formBuilder};
+export {makeFormBuilder};

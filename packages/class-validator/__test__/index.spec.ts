@@ -1,4 +1,4 @@
-import {formBuilder} from "../src/index";
+import {makeFormBuilder} from "../src/index";
 import {IsString,IsNumber,Min} from 'node_modules/class-validator';
 
 
@@ -16,7 +16,7 @@ describe("class-validator",()=>{
         value.str = 1;
         value.num = 12;
 
-        const builder = formBuilder(Sample);
+        const builder = makeFormBuilder(Sample);
         let newForm;
         const form = builder(value,change=>{
             newForm = form.update(change);

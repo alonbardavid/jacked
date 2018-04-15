@@ -13,26 +13,27 @@ export interface FormOptions {
     onInput:onInputFunc;
     schema:any;
 }
-export interface Field {
-
+export interface FieldProps {
     value:any;
     onInput:(value:any)=>void;
     error?:string;
     submitted:boolean;
     disabled:boolean;
     dirty:boolean;
-}
-export type FieldMap = {
-    [name:string]:Field
+};
+export type Field<Skeleton> = FieldMap<Skeleton> & FieldProps;
+
+export type FieldMap<Skeleton> = {
+    [P in keyof Skeleton]: Field<P>
 }
 export type Error = {
     path:string;
     message:string;
     dirty?:boolean;
 }
-export class Form {
+export class Form<Skeleton> {
     value:any;
-    fields:FieldMap;
+    fields:FieldMap<Skeleton>;
     errors?:Error[];
     validator;
     onInput:onInputFunc;
@@ -40,7 +41,7 @@ export class Form {
     _disabled = false;
     isValid = true;
 
-    constructor(value, arg2:Form|FormOptions) {
+    constructor(value, arg2:Form<Skeleton>|FormOptions) {
         this.value =value;
         if (arg2 instanceof Form){
             this._initFromPreviousForm(arg2);
@@ -48,7 +49,7 @@ export class Form {
             this._initFromOptions(arg2);
         }
     }
-    _initFromPreviousForm(previousForm:Form){
+    _initFromPreviousForm(previousForm:Form<Skeleton>){
         this.validator = previousForm.validator;
         this.fields = previousForm.fields;
         this.onInput = previousForm.onInput;
@@ -89,9 +90,9 @@ export class Form {
             }
         })
     }
-    _buildField = (args:{path:string,value:any,error?:string,dirty?:boolean}):Field =>{
+    _buildField = (args:{path:string,value:any,error?:string,dirty?:boolean}):Field<any> =>{
         const {path,value,error,dirty} = args;
-        const oldField:Field = get(this.fields,path);
+        const oldField:Field<any> = get(this.fields,path);
         return {
             value,
             onInput:this._onInput.bind(this,path),
@@ -99,7 +100,7 @@ export class Form {
             submitted:this._submitted,
             disabled:this._disabled,
             dirty:dirty != null? dirty : oldField && oldField.dirty
-        };
+        } as Field<any>;
     };
     _updateFieldsFromErrors(changes:Error[]){
         changes.forEach(change=>{
@@ -189,10 +190,12 @@ export class Form {
         return Array.from(hash.values()).map((x:any)=>x.old?{path:x.path,error:null}:x);
     }
 }
-export function configureBuilder(options):any{
-    return function buildValidator(schema){
-        return function validate(value,onInput){
-            return new Form(value,{
+
+export type formBuilder = <T> (value:T,onInput:onInputFunc)=>Form<T>;
+export function configureBuilder(options){
+    return function makeFormBuilder(schema){
+        return function formBuilder<T>(value:T,onInput:onInputFunc){
+            return new Form<T>(value,{
                 ...options,
                 schema,
                 onInput,
