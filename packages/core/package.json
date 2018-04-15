@@ -23,6 +23,8 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
+    "@jacked/ajv": "^0.0.1",
+    "@jacked/class-validator": "^0.0.1",
     "immutable-assign": "^2.0.4",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",

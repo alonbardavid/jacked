@@ -10,7 +10,7 @@
     "bundle": "lerna run --parallel bundle",
     "compile": "lerna run compile",
     "clean": "lerna run --parallel clean",
-    "test": "lerna run test",
+    "test": "lerna run test --stream",
     "build": "lerna run build"
   },
   "devDependencies": {
