@@ -1,7 +1,6 @@
 import traverse from 'traverse';
 import get from 'lodash.get';
-import set from 'lodash.set';
-import clonedeep from 'lodash.clonedeep';
+import {set} from 'object-path-immutable';
 
 export interface Validator {
     (schema):any;
@@ -69,7 +68,7 @@ export class Form<Skeleton> {
         });
     }
     update(change,validate=true){
-        const newRootValue = set(clonedeep(this.value),change.path,change.value);
+        const newRootValue = set(this.value,change.path,change.value);
         const form = new Form(newRootValue,this);
         if (validate){
             form._validateAfterFieldChange(change.path);
@@ -106,7 +105,7 @@ export class Form<Skeleton> {
         changes.forEach(change=>{
             const value = get(this.value,change.path);
             const field = this._buildField({path:change.path,value,error:change.message,dirty:change.dirty});
-            this.fields = set(clonedeep(this.fields),change.path,field);
+            this.fields = set(this.fields,change.path,field);
         });
         this.isValid = !(this.errors && this.errors.length > 0);
 
@@ -126,7 +125,7 @@ export class Form<Skeleton> {
     _setFieldDirty(path){
         const oldField = get(this.fields,path);
         const field = this._buildField({path,error:oldField.error,dirty:true,value:get(this.value,path)});
-        this.fields = set(clonedeep(this.fields),path,field);
+        this.fields = set(this.fields,path,field);
     }
     _validateAll(){
         this.errors = this.validator(this.value);
