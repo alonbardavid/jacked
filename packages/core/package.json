@@ -1,10 +1,10 @@
 {
   "name": "@jacked/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Jacked core module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
-  "private":false,
+  "private": false,
   "typings": "dist/types/index.d.ts",
   "scripts": {
     "build": "npm-run-all -p \"build:*\"",

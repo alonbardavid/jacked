@@ -1,11 +1,11 @@
 {
   "name": "@jacked/class-validator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Jacked class-validator module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
   "typings": "dist/types/index.d.ts",
-  "private":false,
+  "private": false,
   "scripts": {
     "build": "npm-run-all -p \"build:*\"",
     "build:es6": "tsc -p ./tsconfig.json",
@@ -24,7 +24,7 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "@jacked/core": "^0.1.0",
+    "@jacked/core": "^0.1.1",
     "class-validator": "^0.8.5",
     "reflect-metadata": "^0.1.12"
   },
