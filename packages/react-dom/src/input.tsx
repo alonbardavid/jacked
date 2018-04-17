@@ -27,7 +27,7 @@ export class Input extends React.PureComponent<InputProps> {
         const {focused} = this.state;
         return <div className="jacked-field">
             <input value={field.value || ""} onChange={this.onInputChange} disabled={field.disabled} {...rest}
-                className={`jacked-input ${field.valid?"":"invalid"}`} onFocus={this.onFocus} onBlur={this.onBlur}/>
+                className={`jacked-input ${field.error?"invalid":""}`} onFocus={this.onFocus} onBlur={this.onBlur}/>
             {field.error && (field.submitted || (field.dirty && !focused)) && <div className="jacked-error">
                 {field.error}
             </div> }
@@ -58,7 +58,7 @@ export class NumberInput extends React.PureComponent<InputProps> {
         const {focused} = this.state;
         return <div className="jacked-field jacked-number-field">
             <input value={field.value || ""} onChange={this.onInputChange} disabled={field.disabled} {...rest}
-                   className={`jacked-input ${field.valid?"":"invalid"}`} onFocus={this.onFocus} onBlur={this.onBlur} />
+                   className={`jacked-input ${field.error?"invalid":""}`} onFocus={this.onFocus} onBlur={this.onBlur} />
             {field.error && (field.submitted || (field.dirty && !focused)) && <div className="jacked-error">
                 {field.error}
             </div> }
