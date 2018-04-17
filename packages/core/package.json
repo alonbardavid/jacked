@@ -1,6 +1,6 @@
 {
   "name": "@jacked/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Jacked core module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",

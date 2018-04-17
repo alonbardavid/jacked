@@ -1,7 +1,7 @@
 {
-  "name": "@jacked/ajv",
-  "version": "0.1.0",
-  "description": "Jacked ajv validator",
+  "name": "@jacked/core",
+  "version": "0.0.1",
+  "description": "Jacked core module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
   "typings": "dist/types/index.d.ts",
@@ -23,9 +23,13 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "@jacked/core": "^0.1.0",
-    "ajv": "^6.4.0",
-    "lodash.mapvalues": "^4.6.0"
+    "@jacked/ajv": "^0.0.1",
+    "@jacked/class-validator": "^0.0.1",
+    "immutable-assign": "^2.0.4",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "traverse": "^0.6.6"
   },
   "jest": {
     "moduleFileExtensions": [

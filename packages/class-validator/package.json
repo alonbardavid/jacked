@@ -1,6 +1,6 @@
 {
   "name": "@jacked/class-validator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Jacked class-validator module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
@@ -23,7 +23,7 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "@jacked/core": "^0.0.1",
+    "@jacked/core": "^0.1.0",
     "class-validator": "^0.8.5",
     "reflect-metadata": "^0.1.12"
   },

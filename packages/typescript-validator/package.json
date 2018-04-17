@@ -1,7 +1,7 @@
 {
   "name": "@jacked/ajv",
-  "version": "0.1.0",
-  "description": "Jacked ajv validator",
+  "version": "0.0.1",
+  "description": "Jacked core module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
   "typings": "dist/types/index.d.ts",
@@ -23,7 +23,7 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "@jacked/core": "^0.1.0",
+    "@jacked/core": "^0.0.1",
     "ajv": "^6.4.0",
     "lodash.mapvalues": "^4.6.0"
   },
