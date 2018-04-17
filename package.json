@@ -1,7 +1,7 @@
 {
   "name":"jacked",
   "version":"0.0.1",
-  "private":true,
+  "private":false,
   "description": "",
   "workspaces":[
     "packages/*"
@@ -15,6 +15,9 @@
   },
   "devDependencies": {
       "lerna": "^2.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license":"MIT"
 }

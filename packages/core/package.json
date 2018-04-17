@@ -4,6 +4,7 @@
   "description": "Jacked core module",
   "main": "dist/cjs/index.js",
   "module": "dist/module/index.js",
+  "private":false,
   "typings": "dist/types/index.d.ts",
   "scripts": {
     "build": "npm-run-all -p \"build:*\"",
